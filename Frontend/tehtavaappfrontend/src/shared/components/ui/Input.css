@@ -1,0 +1,135 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-full-width {
+  width: 100%;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #4a5568;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+.input:disabled {
+  background-color: #edf2f7;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Variants */
+.input-outlined {
+  border: 1px solid #cbd5e0;
+  background-color: white;
+}
+
+.input-outlined:focus {
+  border-color: #3182ce;
+}
+
+.input-filled {
+  border: 1px solid transparent;
+  background-color: #edf2f7;
+  border-bottom: 2px solid #cbd5e0;
+  border-radius: 4px 4px 0 0;
+}
+
+.input-filled:focus {
+  background-color: #e2e8f0;
+  border-bottom-color: #3182ce;
+}
+
+.input-standard {
+  border: none;
+  border-bottom: 1px solid #cbd5e0;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.input-standard:focus {
+  border-bottom-color: #3182ce;
+}
+
+/* Sizes */
+.input-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.input-medium {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.input-large {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+/* Error state */
+.input-error {
+  border-color: #e53e3e !important;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.5);
+}
+
+.input-error-text {
+  color: #e53e3e;
+}
+
+.input-helper-text {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: #718096;
+}
+
+/* Icons */
+.input-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+}
+
+.input-icon-left {
+  left: 0.75rem;
+}
+
+.input-icon-right {
+  right: 0.75rem;
+}
+
+.input-with-left-icon {
+  padding-left: 2.5rem;
+}
+
+.input-with-right-icon {
+  padding-right: 2.5rem;
+} 

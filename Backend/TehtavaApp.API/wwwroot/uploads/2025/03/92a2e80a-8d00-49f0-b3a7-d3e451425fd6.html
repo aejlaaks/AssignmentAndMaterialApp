@@ -1,0 +1,250 @@
+﻿
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Markdown to PDF</title>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+        <style>
+            /* Yleiset tyylit */
+            body {
+                font-family: 'Arial', sans-serif;
+                line-height: 1.8;
+                color: #333;
+                margin: 80px 20px; /* 40px ylhäältä ja alhaalta, 20px sivuilta */
+                padding: 0;
+                background-color: #f8f9fa;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                color: #444;
+                margin: 20px 0 10px;
+                line-height: 1.3;
+            }
+
+            h1 {
+                font-size: 2em;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 5px;
+            }
+            h2 {
+                font-size: 1.75em;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5px;
+            }
+            h3 {
+                font-size: 1.5em;
+            }
+
+            p {
+                text-align: justify;
+                margin: 10px 0;
+            }
+
+            /* Listojen tyylit */
+            ul {
+                padding-left: 40px;
+                margin: 10px 0;
+            }
+            ul li {
+                margin-bottom: 5px;
+            }
+            ol {
+                padding-left: 40px;
+                margin: 10px 0;
+            }
+            ol li {
+                margin-bottom: 5px;
+            }
+
+            /* Taulukot */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f4f4f4;
+                font-weight: bold;
+            }
+
+            /* Koodilohkot */
+            pre {
+                background-color: #f5f5f5;
+                border: 1px solid #ccc;
+                padding: 10px;
+                overflow-x: auto;
+                margin: 20px 0;
+                font-family: 'Courier New', monospace;
+                font-size: 0.95em;
+            }
+            code {
+                background-color: #f5f5f5;
+                padding: 2px 4px;
+                font-family: 'Courier New', monospace;
+                font-size: 0.95em;
+            }
+
+            /* Mermaid-kaaviot */
+            .mermaid {
+                display: block;
+                margin: 20px auto;
+                text-align: center;
+            }
+
+            /* Kuvien keskitys */
+            img {
+                display: block;
+                margin: 20px auto;
+                max-width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h2 id="johdanto">Johdanto</h2>
+<p>Tässä oppaassa käsittelemme BIOSin ja UEFIn peruskäsitteitä sekä niiden vaikutusta kaksoiskäynnistysasetuksiin. Dual boot on prosessi, jossa tietokoneelle asennetaan kaksi käyttöjärjestelmää, ja käyttäjä voi valita, kumpaa käyttöjärjestelmää käyttää käynnistyksen yhteydessä.</p>
+<h3 id="biosin-ja-uefin-peruskasitteet">BIOSin ja UEFIn peruskäsitteet</h3>
+<p><strong>BIOS (Basic Input/Output System):</strong></p>
+<ul>
+<li><strong>Historia ja toiminta:</strong> BIOS on vanhempi järjestelmä, joka on ollut käytössä 1980-luvulta lähtien. Se toimii tietokoneen emolevyllä olevana laiteohjelmistona, joka käynnistää tietokoneen ja alustaa laitteiston ennen käyttöjärjestelmän lataamista.</li>
+<li><strong>Rajoitukset:</strong> BIOS tukee vain MBR (Master Boot Record) -osiota, joka rajoittaa kiintolevyn koon 2 TB:iin ja osioiden määrän neljään.</li>
+<li><strong>Käyttöliittymä:</strong> BIOSin käyttöliittymä on tekstipohjainen ja navigointi tapahtuu näppäimistön avulla.</li>
+</ul>
+<p><strong>UEFI (Unified Extensible Firmware Interface):</strong></p>
+<ul>
+<li><strong>Kehitys ja ominaisuudet:</strong> UEFI on moderni korvaaja BIOSille, joka tarjoaa parannettuja ominaisuuksia, kuten nopeamman käynnistysajan, suuremman kiintolevyjen tuen (GPT, GUID Partition Table) ja paremman tietoturvan.</li>
+<li><strong>Edut:</strong> UEFI tukee suuria kiintolevyjä (yli 2 TB) ja useampia osioita. Se tarjoaa graafisen käyttöliittymän ja hiirituen, mikä tekee navigoinnista helpompaa.</li>
+<li><strong>Turvallisuus:</strong> UEFI sisältää Secure Boot -ominaisuuden, joka estää luvattomien ohjelmistojen käynnistymisen tietokoneella.</li>
+</ul>
+<h3 id="dual-boot-maaritelma">Dual boot määritelmä</h3>
+<p>Dual boot tarkoittaa kahden käyttöjärjestelmän asentamista samalle tietokoneelle, jolloin käyttäjä voi valita, kumpaa käyttöjärjestelmää käyttää käynnistyksen yhteydessä. Tämä on hyödyllistä esimerkiksi silloin, kun halutaan käyttää sekä Windows- että Linux-käyttöjärjestelmiä samassa laitteessa.</p>
+<p><strong>Dual boot asennusprosessin vaiheet:</strong></p>
+<ol>
+<li><strong>Varmuuskopiointi:</strong> Ennen Dual boot asennusta on tärkeää varmuuskopioida kaikki tärkeät tiedot.</li>
+<li><strong>Osiointi:</strong> Kiintolevy on jaettava osioihin, jotta molemmat käyttöjärjestelmät voivat olla asennettuna erillisille osioille.</li>
+<li><strong>Käyttöjärjestelmien asennus:</strong> Asenna ensimmäinen käyttöjärjestelmä (esim. Windows) ja sen jälkeen toinen käyttöjärjestelmä (esim. Linux).</li>
+<li><strong>Käynnistyslataimen konfigurointi:</strong> Käynnistyslataimen, kuten GRUBin, konfigurointi on tarpeen, jotta käyttäjä voi valita käyttöjärjestelmän käynnistyksen yhteydessä.</li>
+</ol>
+<p><strong>Vaikutus BIOSin ja UEFIn valintaan:</strong></p>
+<ul>
+<li><strong>BIOS:</strong> Jos käytät BIOSia, sinun on käytettävä MBR-osiota, mikä voi rajoittaa kiintolevyn kokoa ja osioiden määrää.</li>
+<li><strong>UEFI:</strong> UEFI mahdollistaa GPT-osion käytön, mikä tarjoaa enemmän joustavuutta suurten kiintolevyjen ja useiden osioiden kanssa. Lisäksi UEFI:n Secure Boot -ominaisuus voi vaatia lisäkonfigurointia, jotta kaikki käyttöjärjestelmät toimivat oikein.</li>
+</ul>
+<p>Näiden käsitteiden ymmärtäminen on tärkeää, kun suunnittelet kaksoiskäynnistysasetuksia ja valitset oikean laiteohjelmiston tietokoneellesi.</p>
+<h3 id="bios">BIOS</h3>
+<p><strong>BIOSin historia ja toiminta</strong></p>
+<p>BIOS (Basic Input/Output System) on ollut keskeinen osa tietokoneiden käynnistysprosessia jo 1980-luvulta lähtien. Se kehitettiin alun perin IBM PC -tietokoneille, ja siitä tuli nopeasti standardi PC-yhteensopiville tietokoneille. BIOSin päätehtävä on alustaa ja testata laitteistokomponentit, kuten muisti, näytönohjain ja kiintolevyt, ennen kuin käyttöjärjestelmä ladataan.</p>
+<p>BIOS sijaitsee emolevyn ROM-muistissa ja se käynnistyy heti, kun tietokoneen virta kytketään päälle. BIOS suorittaa seuraavat vaiheet:</p>
+<ol>
+<li><strong>POST (Power-On Self Test):</strong> Testaa tietokoneen laitteistokomponentit varmistaakseen, että ne toimivat oikein.</li>
+<li><strong>Bootstrap Loader:</strong> Etsii ja lataa käyttöjärjestelmän käynnistyslataimen kiintolevyltä tai muulta tallennusvälineeltä.</li>
+<li><strong>Käynnistysjärjestys:</strong> Määrittää, mistä laitteesta käyttöjärjestelmä ladataan. Käyttäjä voi muuttaa tätä järjestystä BIOS-asetuksissa.</li>
+<li><strong>BIOS Setup Utility:</strong> Käyttäjä voi muokata laitteiston asetuksia, kuten kellonaikaa, päivämäärää ja laitteiden prioriteettia.</li>
+</ol>
+<p><strong>BIOSin rajoitukset</strong></p>
+<p>BIOSilla on useita rajoituksia, jotka ovat johtaneet sen korvaamiseen UEFI:llä (Unified Extensible Firmware Interface):</p>
+<ul>
+<li><strong>16-bittinen tila:</strong> BIOS toimii 16-bittisessä tilassa, mikä rajoittaa sen kykyä käsitellä suuria määriä muistia ja monimutkaisia laitteistokokoonpanoja.</li>
+<li><strong>Käynnistyslevyn koko:</strong> BIOS tukee enintään 2,2 teratavun kokoisia käynnistyslevyjä, mikä on rajoitus nykyaikaisille suurikapasiteettisille kiintolevyille.</li>
+<li><strong>Käyttöliittymä:</strong> BIOSin tekstipohjainen käyttöliittymä on vanhentunut ja vaikea käyttää verrattuna graafisiin käyttöliittymiin.</li>
+<li><strong>Laajennettavuus:</strong> BIOSin laajennettavuus on rajallinen, mikä vaikeuttaa uusien ominaisuuksien lisäämistä.</li>
+</ul>
+<p>Näiden rajoitusten vuoksi UEFI on kehitetty tarjoamaan parempaa suorituskykyä, laajennettavuutta ja käyttäjäystävällisyyttä, mikä on erityisen tärkeää kaksoiskäynnistysasetuksissa, joissa tarvitaan joustavuutta ja yhteensopivuutta useiden käyttöjärjestelmien kanssa.</p>
+<h3 id="uefi">UEFI</h3>
+<p><strong>UEFIn kehitys ja ominaisuudet</strong></p>
+<p>UEFI (Unified Extensible Firmware Interface) on moderni laiteohjelmistoalusta, joka on kehitetty korvaamaan perinteinen BIOS (Basic Input/Output System). UEFIn kehitys alkoi 1990-luvun lopulla, kun Intel esitteli sen ensimmäisen kerran nimellä EFI (Extensible Firmware Interface). Tavoitteena oli luoda joustavampi ja tehokkaampi alusta, joka voisi vastata nykyaikaisten tietokoneiden kasvaviin vaatimuksiin.</p>
+<p>UEFI tarjoaa useita parannuksia verrattuna BIOSiin, kuten tuki suuremmille kiintolevyille, nopeampi käynnistysaika ja parempi tietoturva. UEFIn kehitys on ollut jatkuvaa, ja se on nykyään laajasti käytössä useimmissa uusissa tietokoneissa.</p>
+<p><strong>UEFIn edut</strong></p>
+<p>UEFI tarjoaa useita etuja verrattuna perinteiseen BIOSiin:</p>
+<ul>
+<li><strong>Suurempi kiintolevyjen tuki:</strong> UEFI tukee GPT (GUID Partition Table) -osiota, joka mahdollistaa yli 2 teratavun kiintolevyjen käytön. BIOS puolestaan käyttää MBR (Master Boot Record) -osiota, joka rajoittaa kiintolevyn koon 2 teratavuun.</li>
+<li><strong>Nopeampi käynnistysaika:</strong> UEFI voi ladata käyttöjärjestelmän suoraan, mikä nopeuttaa käynnistysprosessia. Tämä on erityisen hyödyllistä SSD-levyjen kanssa.</li>
+<li><strong>Parempi tietoturva:</strong> UEFI tukee Secure Boot -ominaisuutta, joka estää luvattomien ohjelmistojen ja käyttöjärjestelmien lataamisen käynnistyksen aikana. Tämä parantaa tietokoneen tietoturvaa merkittävästi.</li>
+<li><strong>Joustavuus ja laajennettavuus:</strong> UEFI on suunniteltu modulaariseksi, mikä mahdollistaa laajennusten ja mukautusten lisäämisen helpommin kuin BIOS.</li>
+</ul>
+<p><strong>UEFIn yhteensopivuus</strong></p>
+<p>UEFIn yhteensopivuus on tärkeä tekijä, erityisesti kun harkitaan kaksoiskäynnistysasetuksia. UEFI tukee useita käyttöjärjestelmiä, kuten Windows, Linux ja macOS, mikä tekee siitä ihanteellisen valinnan monikäyttöjärjestelmäympäristöihin.</p>
+<p>Kaksoiskäynnistysasetuksissa on tärkeää huomioida seuraavat seikat:</p>
+<ul>
+<li><strong>Käyttöjärjestelmän tuki:</strong> Varmista, että kaikki käyttöjärjestelmät tukevat UEFI-käynnistystä. Useimmat modernit käyttöjärjestelmät tukevat UEFI:ta, mutta vanhemmat versiot saattavat vaatia BIOS-yhteensopivuustilaa.</li>
+<li><strong>Osiotyyppi:</strong> Käytä GPT-osiota, joka on yhteensopiva UEFI:n kanssa. Tämä mahdollistaa suurempien kiintolevyjen käytön ja parantaa järjestelmän vakautta.</li>
+<li><strong>Secure Boot:</strong> Jos käytät Secure Boot -ominaisuutta, varmista, että kaikki käyttöjärjestelmät ovat yhteensopivia sen kanssa. Joissakin tapauksissa Secure Boot saattaa estää tiettyjen käyttöjärjestelmien tai ajureiden lataamisen.</li>
+</ul>
+<p>UEFI:n käyttö kaksoiskäynnistysasetuksissa voi parantaa järjestelmän suorituskykyä ja tietoturvaa, mutta se vaatii huolellista suunnittelua ja yhteensopivuuden tarkistamista.</p>
+<h3 id="kaksoiskaynnistysasetukset">Kaksoiskäynnistysasetukset</h3>
+<p>Dual boot tarkoittaa kahden käyttöjärjestelmän asentamista ja käyttämistä samassa tietokoneessa. Tämä mahdollistaa käyttäjälle valinnan, kumpaa käyttöjärjestelmää hän haluaa käyttää käynnistyksen yhteydessä. Kaksoiskäynnistysasetukset voivat vaihdella riippuen siitä, käytetäänkö BIOS- vai UEFI-järjestelmää.</p>
+<p><strong>BIOS-pohjainen Dual boot</strong></p>
+<p>BIOS-pohjaisessa kaksoiskäynnistyksessä on muutamia keskeisiä piirteitä:</p>
+<ul>
+<li><strong>MBR (Master Boot Record):</strong> BIOS käyttää MBR-osiotaulukkoa, joka tukee enintään neljää ensisijaista osiota ja enintään 2 teratavun levyjä.</li>
+<li><strong>Käynnistyslataaja:</strong> BIOS-pohjaisessa järjestelmässä käytetään usein käynnistyslataajia, kuten GRUB tai LILO, jotka asennetaan MBR:ään.</li>
+<li><strong>Käynnistysprosessi:</strong> BIOS lataa käynnistyslataajan MBR:stä, joka sitten lataa käyttöjärjestelmän.</li>
+</ul>
+<p>BIOS-pohjaisen Dual boot asennus voi olla monimutkaisempi, koska MBR:n rajoitukset voivat vaatia osioiden uudelleenjärjestelyä.</p>
+<p><strong>UEFI-pohjainen Dual boot</strong></p>
+<p>UEFI tarjoaa useita etuja BIOS:iin verrattuna:</p>
+<ul>
+<li><strong>GPT (GUID Partition Table):</strong> UEFI käyttää GPT-osiotaulukkoa, joka tukee jopa 128 osiota ja yli 2 teratavun levyjä.</li>
+<li><strong>Käynnistyslataaja:</strong> UEFI-järjestelmissä käytetään usein EFI System Partition (ESP) -osiota, johon käynnistyslataajat, kuten GRUB, asennetaan.</li>
+<li><strong>Käynnistysprosessi:</strong> UEFI lataa käynnistyslataajan suoraan ESP:stä, mikä mahdollistaa nopeamman ja joustavamman käynnistysprosessin.</li>
+</ul>
+<p>UEFI-pohjainen Dual boot on yleensä helpompi asentaa ja hallita, koska GPT:n avulla voidaan luoda useampia ja suurempia osioita.</p>
+<h3 id="vaikutukset-ja-haasteet">Vaikutukset ja haasteet</h3>
+<p><strong>Käyttöjärjestelmän yhteensopivuus</strong></p>
+<p>BIOS ja UEFI ovat kaksi erilaista laiteohjelmistoa, jotka hallitsevat tietokoneen käynnistysprosessia. Näiden kahden järjestelmän yhteensopivuus eri käyttöjärjestelmien kanssa voi vaikuttaa merkittävästi kaksoiskäynnistysasetuksiin.</p>
+<ul>
+<li><strong>BIOS:</strong> Perinteinen BIOS on yhteensopiva vanhempien käyttöjärjestelmien, kuten Windows XP:n ja vanhempien Linux-jakeluiden kanssa. BIOS käyttää MBR-järjestelmää, joka rajoittaa osioiden määrän neljään ja levyn maksimikoon 2 TB:hen.</li>
+<li><strong>UEFI:</strong> UEFI tukee nykyaikaisempia käyttöjärjestelmiä, kuten Windows 10/11 ja uusimpia Linux-jakeluja. UEFI käyttää GPT-järjestelmää, joka mahdollistaa suuremman määrän osioita ja tukee yli 2 TB:n levyjä.</li>
+</ul>
+<p><strong>Levyn osiointi</strong></p>
+<p>Levyn osiointi on keskeinen tekijä kaksoiskäynnistysasetuksissa, ja BIOSin ja UEFIn käyttämät osiointijärjestelmät eroavat merkittävästi toisistaan.</p>
+<ul>
+<li><p><strong>MBR (Master Boot Record):</strong></p>
+<ul>
+<li>Käytössä BIOS-järjestelmissä.</li>
+<li>Tukee enintään neljää ensisijaista osiota.</li>
+<li>Maksimikoko yhdelle osiolle on 2 TB.</li>
+<li>Ei sisällä varmuuskopiointia osiotiedoille.</li>
+</ul>
+</li>
+<li><p><strong>GPT (GUID Partition Table):</strong></p>
+<ul>
+<li>Käytössä UEFI-järjestelmissä.</li>
+<li>Tukee jopa 128 osioita (Windows) tai enemmän (Linux).</li>
+<li>Ei käytännön maksimikokoa osioille.</li>
+<li>Sisältää varmuuskopiot osiotiedoille, mikä parantaa tietoturvaa.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Turvallisuusnäkökohdat</strong></p>
+<p>Turvallisuus on tärkeä tekijä, kun valitaan BIOSin ja UEFIn välillä, erityisesti kaksoiskäynnistysasetuksissa.</p>
+<ul>
+<li><strong>BIOS:</strong> Ei sisällä sisäänrakennettuja turvallisuusominaisuuksia. Alttiimpi haittaohjelmille, jotka voivat muokata käynnistysprosessia.</li>
+<li><strong>UEFI:</strong> Sisältää Secure Boot -ominaisuuden, joka estää luvattomien käyttöjärjestelmien ja ohjelmistojen käynnistymisen. Secure Boot voi kuitenkin aiheuttaa yhteensopivuusongelmia, jos käyttöjärjestelmä tai sen osat eivät ole allekirjoitettuja.</li>
+</ul>
+<p>Kaksoiskäynnistysasetuksissa on tärkeää varmistaa, että kaikki käyttöjärjestelmät ovat yhteensopivia valitun laiteohjelmiston kanssa ja että osiointijärjestelmä tukee tarvittavia osioita ja levytilaa. Lisäksi turvallisuusominaisuudet, kuten Secure Boot, on otettava huomioon, jotta järjestelmä pysyy suojattuna.</p>
+<h2 id="yhteenveto-ja-suositukset">Yhteenveto ja suositukset</h2>
+<p><strong>Yhteenveto eroista</strong></p>
+<ul>
+<li><strong>Käynnistysnopeus:</strong> UEFI on nopeampi kuin BIOS.</li>
+<li><strong>Osiointituki:</strong> UEFI tukee suurempia ja useampia osioita kuin BIOS.</li>
+<li><strong>Käyttöliittymä:</strong> UEFI tarjoaa graafisen käyttöliittymän, kun taas BIOS on tekstipohjainen.</li>
+<li><strong>Turvallisuus:</strong> UEFI tukee Secure Boot -ominaisuutta, joka parantaa turvallisuutta.</li>
+</ul>
+<p><strong>Suositukset kaksoiskäynnistykseen</strong></p>
+<ul>
+<li><strong>Valitse UEFI, jos mahdollista:</strong> UEFI tarjoaa paremman tuen Dual boot ja suuremmille kiintolevyille.</li>
+<li><strong>Tarkista Secure Boot -asetukset:</strong> Jos käytät UEFI:ta, varmista, että Secure Boot on yhteensopiva kaikkien asennettavien käyttöjärjestelmien kanssa.</li>
+<li><strong>Suunnittele osiointi huolellisesti:</strong> Varmista, että kiintolevyllä on riittävästi tilaa ja osioita kaikille käyttöjärjestelmille.</li>
+</ul>
+
+    </body>
+    </html>

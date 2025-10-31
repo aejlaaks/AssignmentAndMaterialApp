@@ -1,0 +1,66 @@
+/* Drag and drop styling */
+body.dragging-active {
+  cursor: grabbing;
+}
+
+[data-droppable-group] {
+  transition: all 0.3s ease;
+}
+
+[data-droppable-group][data-during-drag="true"] {
+  z-index: 10 !important;
+}
+
+[data-droppable-group][data-valid-drop-target="true"] {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.5) !important;
+  z-index: 1000 !important;
+}
+
+[data-droppable-group][data-potential-target="true"] {
+  transform: scale(1.01);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3) !important;
+  z-index: 100 !important;
+}
+
+.dragging {
+  opacity: 0.5;
+  cursor: grabbing !important;
+}
+
+.actively-dragging {
+  opacity: 0.6 !important;
+  cursor: grabbing !important;
+  pointer-events: none;
+  z-index: 2000 !important;
+  position: relative;
+}
+
+/* Make sure group drop zones are always accessible during drag */
+body.dragging-active [data-droppable-group][data-unlocked="true"] {
+  position: relative;
+  z-index: 50;
+}
+
+/* Reduce z-index of non-group elements during drag */
+body.dragging-active *:not([data-droppable-group]) {
+  z-index: 1;
+}
+
+/* Make sure we can see the actively dragged element */
+body.dragging-active .actively-dragging {
+  z-index: 1500 !important;
+}
+
+/* Pulse animation for drop indicators */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+  }
+} 

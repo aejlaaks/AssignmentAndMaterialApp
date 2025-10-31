@@ -1,0 +1,21 @@
+{
+  "name": "tehtavaapp.api",
+  "version": "1.0.0",
+  "description": "TehtavaApp backend with LaTeX, Mermaid, and GraphViz rendering",
+  "private": true,
+  "dependencies": {
+    "mathjax-node": "^2.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "education",
+    "rendering",
+    "latex",
+    "mermaid",
+    "graphviz"
+  ],
+  "author": "",
+  "license": "ISC"
+}

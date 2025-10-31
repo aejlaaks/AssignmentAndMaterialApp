@@ -1,0 +1,72 @@
+// This file contains the solution to fix Azure Blob Storage URL handling issues
+
+// 1. First, add the helper method to the MaterialController class:
+
+    // Helper method to handle Azure Blob Storage URLs
+    private async Task<ActionResult> HandleAzureBlobUrl(Material material, string url)
+    {
+        Console.WriteLine($"Detected Azure Blob Storage URL: {url}");
+        
+        // Extract just the filename from the URL
+        string blobName = Path.GetFileName(url);
+        Console.WriteLine($"Extracted blob name: {blobName}");
+        
+        // Get the file storage service
+        var blobStorageService = HttpContext.RequestServices.GetRequiredService<IFileStorageService>();
+        
+        // Try to get the file using the extracted blob name in the materials folder
+        var fixedPath = $"materials/{blobName}";
+        Console.WriteLine($"Trying to access blob with path: {fixedPath}");
+        
+        var blobStream = await blobStorageService.GetFileAsync(fixedPath);
+        
+        if (blobStream != null)
+        {
+            // Update access count
+            material.IncrementAccessCount();
+            await _materialService.UpdateMaterialAsync(material);
+            
+            // Return file with proper MIME type
+            var blobMimeType = string.IsNullOrEmpty(material.ContentType) 
+                ? GetMimeType(material.FileUrl)
+                : material.ContentType;
+            
+            Console.WriteLine($"Returning file with MIME type: {blobMimeType}");
+            return File(blobStream, blobMimeType);
+        }
+        
+        Console.WriteLine($"Could not find blob using extracted name: {blobName}");
+        return null;
+    }
+
+// 2. Then, modify every place where remote URLs are handled:
+
+    // If material URL is a remote URL, redirect to it
+    if (material.FileUrl.StartsWith("http"))
+    {
+        // Special handling for Azure Blob Storage URLs
+        if (material.FileUrl.Contains("tehtavatblocproduction.blob.core.windows.net/uploads/materials/"))
+        {
+            var result = await HandleAzureBlobUrl(material, material.FileUrl);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        
+        Console.WriteLine($"Found remote URL, but will proxy content to avoid CORS issues: {material.FileUrl}");
+        
+        try {
+            // Create HttpClient to download the remote file
+            // ... rest of existing code ...
+        }
+        // ... rest of existing code ...
+    }
+
+// 3. The fix needs to be applied in three places in MaterialController.cs:
+//    - Around line 407 (already implemented)
+//    - Around line 552
+//    - Around line 646
+
+// This solution enables direct access to Azure Blob Storage using the SDK instead of HTTP requests
+// when handling URLs from the "tehtavatblocproduction.blob.core.windows.net/uploads/materials/" source. 

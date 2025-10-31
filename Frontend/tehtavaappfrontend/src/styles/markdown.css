@@ -1,0 +1,287 @@
+/* 
+ * Markdown Styling - with fixes for table spacing issues
+ */
+
+/* Base markdown container styling */
+.markdown-body,
+.markdown-content {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color: #24292e;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* --- TABLE FIXES --- */
+/* Root fix for table spacing */
+.table-container {
+  overflow-x: auto !important;
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  margin: 1rem 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Force zero margins for any element before tables */
+.markdown-body *:not(table) + .table-container,
+.markdown-content *:not(table) + .table-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Remove all paragraph spacing directly before tables */
+.markdown-body p:has(+ .table-container),
+.markdown-content p:has(+ .table-container) {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Ensure table has proper rendering */
+.markdown-table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  table-layout: auto !important;
+  border: 1px solid #ddd !important;
+}
+
+/* Deal with vertical spacing in table cells */
+.table-cell, .markdown-table td {
+  border: 1px solid #ddd !important;
+  padding: 8px !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  text-align: left !important;
+  vertical-align: middle !important;
+  line-height: 1.5 !important;
+}
+
+.table-header-cell, .markdown-table th {
+  border: 1px solid #ddd !important;
+  padding: 8px !important;
+  background-color: #f5f5f5 !important;
+  font-weight: bold !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  text-align: left !important;
+  vertical-align: middle !important;
+  line-height: 1.5 !important;
+}
+
+/* Completely remove all breaks in table cells */
+.markdown-table td br,
+.markdown-table th br {
+  display: none !important;
+}
+
+/* Make paragraphs inside table cells inline with no margins */
+.markdown-table td p,
+.markdown-table th p {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline !important;
+  white-space: normal !important;
+}
+
+/* --- PARAGRAPH & TEXT STYLING --- */
+/* Line breaks should create visual breaks */
+.markdown-content br,
+.markdown-body br {
+  content: "";
+  display: inline;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  visibility: visible;
+}
+
+/* Paragraphs should have spacing between them */
+.markdown-content p,
+.markdown-body p {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.2rem !important;
+  min-height: 0 !important;
+  display: block !important;
+}
+
+/* --- LIST STYLING --- */
+/* Space between list items */
+.markdown-content li,
+.markdown-body li {
+  margin-bottom: 0.5rem;
+}
+
+/* Fix for bullet points before tables */
+.markdown-body ul,
+.markdown-body ol,
+.markdown-content ul,
+.markdown-content ol {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+/* Reduce spacing after lists when they precede tables */
+.markdown-body li:last-child,
+.markdown-content li:last-child {
+  margin-bottom: 0.1rem;
+}
+
+/* Reduce spacing between lists and tables */
+.markdown-body ul + .table-container,
+.markdown-body ol + .table-container,
+.markdown-content ul + .table-container,
+.markdown-content ol + .table-container {
+  margin-top: 0 !important;
+}
+
+/* Reduce spacing between paragraphs and tables */
+.markdown-body p + .table-container,
+.markdown-content p + .table-container {
+  margin-top: 0 !important;
+}
+
+/* --- CODE BLOCKS --- */
+/* Code blocks and inline code */
+.markdown-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 85%;
+}
+
+.markdown-body pre {
+  background-color: #f6f8fa;
+  border-radius: 3px;
+  padding: 16px;
+  overflow: auto;
+  line-height: 1.45;
+}
+
+/* --- GRAPHVIZ & DIAGRAMS --- */
+/* GraphViz diagram styling */
+.markdown-graphviz-container {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* --- MATH FORMULAS --- */
+/* LaTeX rendering styles */
+.katex-display {
+  margin: 1em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+/* Critical - force tables to have no spacing */
+.markdown-body .table-container,
+.table-container,
+table.markdown-table,
+.markdown-body table {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: none !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Force zero vertical margins in parent elements */
+.markdown-body .table-container::before,
+.table-container::before {
+  content: "";
+  display: block;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+
+/* Target the element that ReactMarkdown creates as table wrapper */
+[data-reactroot] .table-container,
+.markdown-body > div > .table-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Override any other inherited styles */
+div[data-table-container="true"] {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: none !important;
+}
+
+/* Force removal of paragraph and block spacing before tables */
+.markdown-body p + .table-container,
+.markdown-body ul + .table-container,
+.markdown-body ol + .table-container,
+.markdown-body div + .table-container,
+.markdown-body h1 + .table-container,
+.markdown-body h2 + .table-container,
+.markdown-body h3 + .table-container,
+.markdown-body h4 + .table-container,
+.markdown-body h5 + .table-container,
+.markdown-body h6 + .table-container,
+.markdown-body blockquote + .table-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Remove margins directly from p elements preceding tables */
+.markdown-body p:has(+ .table-container) {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Extra aggressive rule to target any element before a table */
+*:has(+ .table-container) {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Eliminate space from paragraphs that might be before tables */
+.paragraph-before-possible-table {
+  margin-bottom: 0.2rem !important;
+}
+
+/* Ensure the table wrapper has no margin */
+.table-spacing-fix-wrapper {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Eliminate extra space from child elements in the wrapper */
+.table-spacing-fix-wrapper > * {
+  margin-top: 0 !important;
+}
+
+/* Remove whitespace from the ReactMarkdown output */
+.markdown-body > .table-spacing-fix-wrapper::before,
+.markdown-body > .table-spacing-fix-wrapper::after {
+  content: none !important;
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Fix for Chrome and other browsers */
+.markdown-body .paragraph-before-possible-table + .table-container,
+.markdown-body p + .table-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Fix for Ohm symbol and other math symbols */
+.markdown-body .katex, .markdown-body .katex-display {
+  font-size: 1.1em !important;
+}
+
+/* Ensure regular Omega displays correctly */
+.markdown-body span[data-text="Ω"],
+.markdown-body span.mord:contains("Ω") {
+  font-family: KaTeX_Main, 'Times New Roman', serif !important;
+} 

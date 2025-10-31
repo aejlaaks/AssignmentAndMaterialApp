@@ -1,0 +1,85 @@
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-bordered {
+  border: 1px solid #e2e8f0;
+}
+
+.card-hoverable {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hoverable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Shadow variants */
+.card-shadow-none {
+  box-shadow: none;
+}
+
+.card-shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.card-shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Padding variants */
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-sm .card-header,
+.card-padding-sm .card-body,
+.card-padding-sm .card-footer {
+  padding: 0.75rem;
+}
+
+.card-padding-md .card-header,
+.card-padding-md .card-body,
+.card-padding-md .card-footer {
+  padding: 1.25rem;
+}
+
+.card-padding-lg .card-header,
+.card-padding-lg .card-body,
+.card-padding-lg .card-footer {
+  padding: 1.75rem;
+}
+
+/* Card header */
+.card-header {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.card-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+/* Card footer */
+.card-footer {
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto;
+} 

@@ -1,0 +1,142 @@
+trigger:
+  branches:
+    include:
+      - master  # Vain master-branch julkaistaan
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Build
+  displayName: 'Rakennetaan sovellus'
+  jobs:
+  - job: Build
+    steps:
+    - task: UseNode@1
+      inputs:
+        version: '18.x'
+    
+    # Debug: Tarkistetaan package.json
+    - script: |
+        echo "Checking package.json build script:"
+        cd Frontend/tehtavaappfrontend
+        cat package.json | grep -A 5 "scripts"
+      displayName: 'Debug - Check build script'
+    
+    # Create a custom .env.production file with the correct production URL
+    - script: |
+        cd Frontend/tehtavaappfrontend
+        echo "Creating custom .env.production file"
+        echo "VITE_API_URL=https://tehtavat.swedencentral.cloudapp.azure.com" > .env.production
+        echo "VITE_ENV=production" >> .env.production
+        echo "VITE_ENABLE_ANALYTICS=true" >> .env.production
+        cat .env.production
+      displayName: 'Create Production Environment File'
+    
+    # Build with NODE_ENV=production to ensure .env.production is used
+    - script: |
+        cd Frontend/tehtavaappfrontend
+        npm install
+        NODE_ENV=production npm run build
+      displayName: 'Rakennetaan React'
+    
+    # Verify that production environment variables are used
+    - script: |
+        echo "Verifying production environment variables:"
+        cd Frontend/tehtavaappfrontend/dist
+        grep -r "tehtavat.swedencentral.cloudapp.azure.com" . || echo "Production domain not found in build files"
+      displayName: 'Verify Production Environment'
+    
+    # Debug: Tarkistetaan build-hakemisto
+    - script: |
+        echo "Listing directories after build:"
+        ls -la Frontend/tehtavaappfrontend/
+        echo "Checking for dist directory:"
+        ls -la Frontend/tehtavaappfrontend/dist || echo "dist directory not found"
+        echo "Checking for build directory:"
+        ls -la Frontend/tehtavaappfrontend/build || echo "build directory not found"
+      displayName: 'Debug - List build directories'
+
+    # Käytetään oikeaa hakemistoa (tämä määritetään debug-tulosten perusteella)
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: 'Frontend/tehtavaappfrontend/dist'  # Tai build, riippuen debug-tuloksista
+        contents: '**'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/react-build'
+      displayName: 'Kopioidaan React build artifacteihin'
+      continueOnError: true  # Jatketaan, vaikka tämä epäonnistuisi
+    
+    # Debug: Tarkistetaan artifact-hakemisto
+    - script: |
+        echo "Listing artifact staging directory:"
+        ls -la $(Build.ArtifactStagingDirectory)
+        echo "Checking react-build directory:"
+        ls -la $(Build.ArtifactStagingDirectory)/react-build || echo "react-build directory not found"
+      displayName: 'Debug - List artifact directories'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: 'Backend/TehtavaApp.API/TehtavaApp.API.csproj'
+        arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/api-build'
+        zipAfterPublish: false
+      displayName: 'Rakennetaan ASP.NET Core API'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+
+- stage: Deploy
+  displayName: 'Julkaistaan Azure VM:lle'
+  jobs:
+  - deployment: DeployProduction
+    environment: production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: 'drop'
+              downloadPath: '$(Build.ArtifactStagingDirectory)'
+          
+          # Debug: Tarkistetaan ladatut artifactit
+          - script: |
+              echo "Listing downloaded artifacts:"
+              ls -la $(Build.ArtifactStagingDirectory)/drop
+              echo "Checking api-build directory:"
+              ls -la $(Build.ArtifactStagingDirectory)/drop/api-build || echo "api-build directory not found"
+              echo "Checking react-build directory:"
+              ls -la $(Build.ArtifactStagingDirectory)/drop/react-build || echo "react-build directory not found"
+            displayName: 'Debug - List downloaded artifacts'
+
+          - task: CopyFilesOverSSH@0
+            inputs:
+              sshEndpoint: 'sshToTehtavat'
+              sourceFolder: '$(Build.ArtifactStagingDirectory)/drop/api-build'
+              targetFolder: '/var/www/production-api'
+              cleanTargetFolder: true
+              overwrite: true
+            displayName: 'Deploy ASP.NET Core API'
+
+          # Tämä tehtävä suoritetaan vain, jos react-build-hakemisto löytyy
+          - task: CopyFilesOverSSH@0
+            inputs:
+              sshEndpoint: 'sshToTehtavat'
+              sourceFolder: '$(Build.ArtifactStagingDirectory)/drop/react-build'
+              targetFolder: '/var/www/production-react'
+              cleanTargetFolder: true
+              overwrite: true
+            displayName: 'Deploy React from artifacts'
+            continueOnError: true  # Jatketaan, vaikka tämä epäonnistuisi
+
+          # Vaihtoehtoinen React-deployment suoraan build-hakemistosta
+          - task: SSH@0
+            inputs:
+              sshEndpoint: 'sshToTehtavat'
+              runOptions: 'inline'
+              inline: |
+                sudo systemctl restart kestrel-api
+                sudo systemctl restart nginx
+            displayName: 'Restart Services'

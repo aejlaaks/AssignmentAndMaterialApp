@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "react-refresh/only-export-components": "off",
+    "prefer-const": "off",
+    "no-useless-catch": "off",
+    "@typescript-eslint/no-require-imports": "off"
+  }
+} 

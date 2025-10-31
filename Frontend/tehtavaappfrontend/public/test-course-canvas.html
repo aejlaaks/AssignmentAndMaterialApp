@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseCanvas Test</title>
+  <script type="module">
+    import React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import CourseCanvas from '../src/components/CourseCanvas';
+    
+    // Sample blocks for testing
+    const testBlocks = [
+      {
+        id: 'block-1',
+        type: 'text',
+        content: 'This is a test text block with some content. It should be collapsible.',
+        title: 'Text Block 1'
+      },
+      {
+        id: 'block-2',
+        type: 'markdown',
+        content: '# Markdown Block\n\nThis is a **markdown** block with some _formatting_.',
+        title: 'Markdown Block 1'
+      },
+      {
+        id: 'block-3',
+        type: 'text',
+        content: 'Another text block with different content to test collapsing functionality.',
+        title: 'Text Block 2'
+      }
+    ];
+    
+    // Render the CourseCanvas component
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      React.createElement(CourseCanvas, {
+        courseId: 'test-course',
+        initialBlocks: testBlocks,
+        onBlocksChange: (blocks) => console.log('Blocks changed:', blocks)
+      })
+    );
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
