@@ -28,6 +28,7 @@
 - 📚 **Course Management** - Create and manage courses with materials and assignments
 - 👥 **Group Management** - Organize students into groups for collaborative work
 - 📝 **Assignment System** - Create, assign, and grade assignments with rubrics
+- 🤖 **AI-Powered Grading** - Automated assignment grading with OpenAI/Azure OpenAI
 - 📄 **Material Distribution** - Upload and share course materials (PDFs, documents, images)
 - 📊 **Progress Tracking** - Monitor student performance and generate statistics
 - 🔔 **Real-time Notifications** - Stay updated with course activities
@@ -66,6 +67,15 @@
   - Manage group enrollments
 
 #### 📊 Assessment & Grading
+- **AI-Powered Grading** 🤖 **NEW!**
+  - Automatic grading using OpenAI GPT-4o or Azure OpenAI
+  - Two modes: Assisted (teacher approval) or Automatic
+  - Uses assignment rubrics for detailed evaluation
+  - Generates constructive feedback in Finnish
+  - Provides confidence scores and reasoning
+  - Configurable AI provider and model selection
+  - Transparent AI attribution (optional)
+
 - **Submission Review**
   - View all student submissions
   - Download submitted files
@@ -500,12 +510,81 @@ POST   /api/assignment/{id}/submit      # Submit assignment
 ### Grading System
 
 **Features:**
-- Numerical grades (0-100)
+- Numerical grades (0-5 Finnish scale)
 - Rubric-based grading
 - Inline comments
 - Grading history
 - Grade statistics
 - Export capabilities
+
+#### 🤖 AI-Powered Grading (NEW!)
+
+**Overview:**
+TehtavaApp now includes intelligent AI-powered grading capabilities that assist teachers in evaluating student submissions quickly and consistently.
+
+**Supported AI Providers:**
+- **OpenAI** - GPT-4o, GPT-4-turbo
+- **Azure OpenAI** - Enterprise-grade with custom deployments
+
+**Operating Modes:**
+1. **Assisted Mode** (Recommended)
+   - AI generates grading suggestions
+   - Teacher reviews and can modify before applying
+   - Full control over final grades
+   - Learn from AI's reasoning
+
+2. **Automatic Mode**
+   - AI grades are applied directly
+   - Teacher can review afterwards
+   - Faster for large volumes
+   - Configurable confidence thresholds
+
+**How It Works:**
+1. Teacher opens a student submission
+2. Clicks "Generate AI Grading Suggestion"
+3. AI analyzes:
+   - Assignment description and requirements
+   - Grading rubric (if defined)
+   - Student's submission content
+4. AI provides:
+   - Grade (0-5 scale)
+   - Detailed constructive feedback in Finnish
+   - Reasoning for the grade
+   - Confidence score (0-100%)
+   - Scores per rubric criterion (if applicable)
+5. Teacher can:
+   - ✅ Accept the suggestion as-is
+   - ✏️ Modify grade or feedback
+   - ❌ Reject and grade manually
+
+**Benefits:**
+- ⚡ **Speed**: Grade assignments in seconds
+- 🎯 **Consistency**: Same criteria applied to all submissions
+- 📝 **Quality Feedback**: Detailed, constructive comments
+- 🔍 **Transparency**: See AI's reasoning and confidence level
+- 📊 **Rubric Support**: Evaluates against defined criteria
+- 🌐 **Finnish Language**: Feedback generated in Finnish
+- 🔒 **Privacy**: Optional AI attribution marking
+
+**Configuration:**
+Administrators can configure AI grading through the admin panel:
+- Enable/disable AI grading
+- Choose AI provider (OpenAI or Azure OpenAI)
+- Set operating mode (Assisted or Automatic)
+- Configure API keys and model settings
+- Toggle AI attribution visibility
+- Test connection before use
+
+**Cost Efficiency:**
+- Average cost: ~€0.008 per assignment (less than 1 cent)
+- Significant time savings for teachers
+- Scales to any number of submissions
+
+**Security & Privacy:**
+- API keys stored securely (User Secrets / Azure Key Vault)
+- Metadata tracked for transparency
+- GDPR compliant
+- Optional marking of AI-graded submissions
 
 ### Notification System
 
@@ -662,6 +741,7 @@ We welcome contributions! Please follow these guidelines:
 - 📚 **Kurssinhallinta** - Luo ja hallitse kursseja materiaaleineen ja tehtävineen
 - 👥 **Ryhmähallinta** - Järjestä opiskelijat ryhmiin yhteistyötä varten
 - 📝 **Tehtäväjärjestelmä** - Luo, anna ja arvioi tehtäviä rubriikkien avulla
+- 🤖 **Tekoälypohjainen arviointi** - Automaattinen tehtävien arviointi OpenAI:lla tai Azure OpenAI:lla
 - 📄 **Materiaalien jakelu** - Lataa ja jaa kurssimateriaalia (PDF, dokumentit, kuvat)
 - 📊 **Edistymisen seuranta** - Seuraa opiskelijoiden suoriutumista ja luo tilastoja
 - 🔔 **Reaaliaikaiset ilmoitukset** - Pysy ajan tasalla kurssiaktiviteeteista
@@ -700,6 +780,15 @@ We welcome contributions! Please follow these guidelines:
   - Hallitse ryhmäilmoittautumisia
 
 #### 📊 Arviointi ja arvostelu
+- **Tekoälypohjainen arviointi** 🤖 **UUSI!**
+  - Automaattinen arviointi OpenAI GPT-4o:lla tai Azure OpenAI:lla
+  - Kaksi tilaa: Avustettu (opettaja hyväksyy) tai Automaattinen
+  - Käyttää tehtävän rubriikkia yksityiskohtaiseen arviointiin
+  - Luo rakentavaa palautetta suomeksi
+  - Tarjoaa luotettavuuspisteet ja perustelut
+  - Konfiguroitava AI-palveluntarjoaja ja malli
+  - Läpinäkyvä AI-merkintä (valinnainen)
+
 - **Palautusten tarkastelu**
   - Katso kaikki opiskelijoiden palautukset
   - Lataa palautetut tiedostot
@@ -1028,7 +1117,16 @@ Raportoidessasi virheitä, sisällytä:
 
 ## Muutosloki
 
-### Versio 1.0.0 (Nykyinen)
+### Versio 1.1.0 (Uusin) 🎉
+- 🤖 **UUSI: Tekoälypohjainen arviointi**
+  - OpenAI ja Azure OpenAI -integraatiot
+  - Avustettu ja automaattinen arviointitila
+  - Rubriikkipohjainen arviointi
+  - Suomenkielinen palaute
+  - Admin-paneeli AI-asetusten hallintaan
+  - Läpinäkyvä metadata ja luottamuspisteet
+
+### Versio 1.0.0
 - ✅ Kurssinhallinta
 - ✅ Materiaalien jakelu
 - ✅ Tehtäväjärjestelmä
@@ -1036,7 +1134,7 @@ Raportoidessasi virheitä, sisällytä:
 - ✅ Ryhmähallinta
 - ✅ Reaaliaikaiset ilmoitukset
 - ✅ SOLID-refaktorointi valmis
-- ✅ Suorituskykyoptim oinnit
+- ✅ Suorituskykyoptimoinnit
 
 ---
 
