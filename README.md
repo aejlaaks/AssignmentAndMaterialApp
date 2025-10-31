@@ -420,6 +420,70 @@ The system uses SQL Server with Entity Framework Core. Default configuration:
 - Migrations: Automatic on startup
 - Seeding: Admin user and roles
 
+### AI Grading Configuration
+
+Configure AI-powered grading in `appsettings.json`:
+
+**OpenAI Setup:**
+```json
+{
+  "AIGrading": {
+    "Enabled": true,
+    "Provider": "OpenAI",
+    "Mode": "Assisted",
+    "MarkAsAIGenerated": true,
+    "OpenAI": {
+      "ApiKey": "your-openai-api-key",
+      "Model": "gpt-4o",
+      "MaxTokens": 2000
+    }
+  }
+}
+```
+
+**Azure OpenAI Setup:**
+```json
+{
+  "AIGrading": {
+    "Enabled": true,
+    "Provider": "AzureOpenAI",
+    "Mode": "Assisted",
+    "MarkAsAIGenerated": true,
+    "AzureOpenAI": {
+      "Endpoint": "https://your-resource.openai.azure.com",
+      "ApiKey": "your-azure-api-key",
+      "DeploymentName": "your-deployment-name",
+      "ApiVersion": "2024-02-15-preview"
+    }
+  }
+}
+```
+
+**⚠️ Security Best Practices:**
+- **Development**: Use User Secrets for API keys
+  ```bash
+  dotnet user-secrets set "AIGrading:OpenAI:ApiKey" "your-key"
+  ```
+- **Production**: Use Azure Key Vault or Environment Variables
+- **Never** commit API keys to version control
+- Add `appsettings.json` to `.gitignore`
+
+**Configuration Options:**
+- `Enabled`: Enable/disable AI grading
+- `Provider`: "OpenAI" or "AzureOpenAI"
+- `Mode`: "Assisted" (teacher approval) or "Automatic"
+- `MarkAsAIGenerated`: Show AI attribution to students
+- `Model`: AI model to use (e.g., "gpt-4o", "gpt-4-turbo")
+- `MaxTokens`: Maximum response length (default: 2000)
+
+**Admin Panel:**
+Administrators can also configure AI settings through the web interface:
+1. Login as Admin
+2. Navigate to Admin Panel → AI Grading Settings
+3. Configure provider and credentials
+4. Test connection
+5. Save settings
+
 ## API Documentation
 
 ### Authentication Endpoints
@@ -1139,5 +1203,5 @@ Raportoidessasi virheitä, sisällytä:
 ---
 
 **Päivitetty:** 2025-10-31  
-**Versio:** 1.0.0  
+**Versio:** 1.1.0 (🤖 AI-Powered Grading)  
 **Tila:** Tuotantovalmis
